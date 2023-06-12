@@ -3,7 +3,7 @@ from typing import Any
 
 
 def create_database(database_name: str, params: dict):
-    """Создание базы данных и таблиц для сохранения данных о каналах и видео."""
+    """Создание базы данных и таблиц для сохранения данных о работодателях и их вакансиях"""
 
     conn = psycopg2.connect(dbname='postgres', **params)
     conn.autocommit = True
@@ -13,7 +13,7 @@ def create_database(database_name: str, params: dict):
         f"""
         SELECT pg_terminate_backend(pg_stat_activity.pid)
         FROM pg_stat_activity
-        WHERE pg_stat_activity.datname = '{database_name}' -- ← изменить на свое название БД
+        WHERE pg_stat_activity.datname = '{database_name}' 
         AND pid <> pg_backend_pid();
         """
     )
@@ -50,6 +50,7 @@ def create_database(database_name: str, params: dict):
 
 
 def get_salary(salary):
+    """Вспомогательная функция для проверки наличия данных о ЗП и их записи в переменную списка"""
     formatted_salary = [None, None]
     if salary and salary['from'] and salary['from'] != 0:
         formatted_salary[0] = salary['from']
@@ -59,7 +60,7 @@ def get_salary(salary):
 
 
 def save_data_to_database(data: list[dict[str, Any]], database_name: str, params: dict):
-    """Сохранение данных о каналах и видео в базу данных."""
+    """Сохранение данных о работодателях и их вакансиях в базу данных."""
 
     conn = psycopg2.connect(dbname=database_name, **params)
 
